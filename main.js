@@ -10,4 +10,4 @@ const scene = new THREE.Scene();
 scene.background = new THREE.Color( r: '#F0F0F0');
 
 //Camera
-const camera;
+const camera = new.THREE.PerspectiveCamera(fov:75, aspect:window.innerWidth / window.innerHeight, near:0.1, far: 1000);
