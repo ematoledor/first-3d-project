@@ -1,46 +1,62 @@
-import { Theater } from 'lucide-react';
 import * as THREE from 'three';
-import { VK_FORMAT_ASTC_10x10_SFLOAT_BLOCK_EXT } from 'three/examples/jsm/libs/ktx-parse.module.js';
-import emissivemap_fragmentGlsl from 'three/src/renderers/shaders/ShaderChunk/emissivemap_fragment.glsl.js';
-import { color } from 'three/webgpu';
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
 const canvas = document.getElementById('canvas');
 
-// 1. Scene
+//Scene
 
 const scene = new THREE.Scene();
-
 scene.background = new THREE.Color('#F0F0F0');
 
-// Camera
-const camera = new THREE.PerspectiveCamera (75, window.innerWidth / window.innerHeight, 0.1, 1000);
+//Camera
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 camera.position.z = 5;
 
-// Object
-const geometry = new THREE.DodecahedronGeometry();
-const material = new THREE.MeshLambertMaterial({color: '#468585', emissive: '#468585'});
-const cube = new THREE.Mesh( geometry, material );
-scene.add(cube);
+//Object
 
-// Add lightning
-const light = new THREE.DirectionalLight(0x9CDBA6, 10);
+const geometry = new THREE.DodecahedronGeometry();
+const material = new THREE.MeshLambertMaterial({color: '#468585', emmisive: '#468585'});
+const dodecahedron = new THREE.Mesh(geometry, material);
+
+const boxgeometry = new THREE.BoxGeometry(2, 0.1, 2);
+const boxmaterial = new THREE.MeshLambertMaterial({color: '#B4B4B3'});
+const box = new THREE.Mesh(boxgeometry, boxmaterial);
+box.position.y = -1.5;
+
+scene.add(dodecahedron);
+scene.add(box);
+
+//Light
+const light = new THREE.SpotLight(0x006769, 100);
 light.position.set(1, 1, 1);
 scene.add(light);
 
-//Set renderer
-const renderer = new THREE.WebGLRenderer();
+// Renderer
+const renderer = new THREE.WebGLRenderer({ canvas });
 renderer.setSize(window.innerWidth, window.innerHeight);
-document.body.appendChild(renderer.domElement);
+renderer.setPixelRatio(window.devicePixelRatio);
 
+// Add orbitControls.
 
-//Animate scene
+const controls = new OrbitControls(camera, renderer.domElement);
+
+controls.enableDamping = true;
+controls.dampingFactor = 0.05;
+controls.enableZoom = true;
+controls.enablePan = true;
+
+// Add Animations
 function animate() {
     requestAnimationFrame(animate);
 
-    cube.rotation.x+= 0.01;
-    cube.rotation.y += 0.01;
+    dodecahedron.rotation.x += 0.01;
+    dodecahedron.rotation.y += 0.01;
+
+    box.rotation.y += 0.005;
+
+    controls.update();
 
     renderer.render(scene, camera);
 }
 
-animate();
+animate()
