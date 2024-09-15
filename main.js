@@ -1,13 +1,18 @@
 import { Theater } from 'lucide-react';
 import * as THREE from 'three';
 
-const canvas:HTMLElement = document.getElementById( elementid: 'canvas');
+const canvas = document.getElementById('canvas');
 
 // 1. Scene
 
 const scene = new THREE.Scene();
 
-scene.background = new THREE.Color( r: '#F0F0F0');
+scene.background = new THREE.Color('#F0F0F0');
 
 //Camera
-const camera = new.THREE.PerspectiveCamera(fov:75, aspect:window.innerWidth / window.innerHeight, near:0.1, far: 1000);
+const camera = new THREE.PerspectiveCamera (75, window.innerWidth / window.innerHeight, 0.1, 1000);
+camera.position.z = 5;
+
+// Object
+const geometry = new THREE.DodecahedronGeometry();
+const material = new THREE.MeshLambertMaterial()
